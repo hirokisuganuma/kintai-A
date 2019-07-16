@@ -20,4 +20,16 @@ Rails.application.routes.draw do
   #work_edit resource
   get 'users/:id/works/:date/edit', to: 'works#edit', as: :edit_works
   patch 'users/:id/works/:date/update', to: 'works#update', as: :update_works
+  
+  #base_resource
+   resources :bases do
+    collection do
+      get  'base_edit'
+      post 'base_add'
+      patch 'base_update'
+      delete 'base_delete'
+      get 'base_edit_modal'
+    end
+  end
+  
 end
