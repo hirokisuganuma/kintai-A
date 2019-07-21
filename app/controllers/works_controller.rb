@@ -4,8 +4,8 @@ class WorksController < ApplicationController
     @user = User.find(params[:id])
     if    current_user.admin? 
     elsif current_user != User.find(params[:id]) 
-         redirect_to(root_url) 
-         flash[:warning] = "ほかのユーザにはアクセスできません"
+        redirect_to(root_url) 
+        flash[:warning] = "ほかのユーザにはアクセスできません"
     end
     @first_day = Date.parse(params[:date])
     @last_day = @first_day.end_of_month

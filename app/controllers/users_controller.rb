@@ -4,7 +4,6 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info]
 
   def index
-    @user = User.find(1)
     @users = User.paginate(page: params[:page]).search(params[:search])
       if current_user.admin?
       else
@@ -15,11 +14,11 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-     if    current_user.admin? 
-     elsif current_user != User.find(params[:id]) 
-           redirect_to(root_url) 
-           flash[:warning] = "ほかのユーザにはアクセスできません"
-     end
+    if    current_user.admin? 
+    elsif current_user != User.find(params[:id]) 
+        redirect_to(root_url) 
+        flash[:warning] = "ほかのユーザにはアクセスできません"
+    end
     if params[:first_day].nil?
       @first_day = Date.today.beginning_of_month
     else

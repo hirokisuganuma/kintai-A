@@ -3,6 +3,5 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   include WorksHelper
   def top
-    @user = User.find(1)
   end
 end
