@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190710194211) do
+ActiveRecord::Schema.define(version: 20190721093801) do
 
   create_table "bases", force: :cascade do |t|
     t.string "name"
@@ -30,6 +30,11 @@ ActiveRecord::Schema.define(version: 20190710194211) do
     t.time "basic_time", default: "2000-01-01 22:30:00"
     t.time "specified_time", default: "2000-01-01 23:00:00"
     t.boolean "admin", default: false
+    t.boolean "sv"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer "worker_number"
+    t.integer "card_id"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
