@@ -78,6 +78,10 @@ class UsersController < ApplicationController
       end
   end
   
+  def working_users
+    @users = User.get_working_user.paginate(page: params[:page])
+  end
+  
   private
 
     def user_params

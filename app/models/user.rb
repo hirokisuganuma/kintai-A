@@ -22,6 +22,10 @@ class User < ApplicationRecord
     end
   end
 
+  def User.get_working_user
+    joins(:works).where(works:{day: Date.today, leaving_time: nil}).where.not(works: {attendance_time: nil})
+  end
+
   #validates :basic_time,  presence: true
 
   #validates :specified_time,  presence: true 
