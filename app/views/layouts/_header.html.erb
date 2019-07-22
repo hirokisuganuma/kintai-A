@@ -1,9 +1,9 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
-    <%= link_to "勤怠管理システム", top_path(1), id: "logo" %>
+    <%= link_to "勤怠管理システム", root_path, id: "logo" %>
     <nav>
       <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to "ホーム", top_path(1) %></li>
+        <li><%= link_to "ホーム", root_path %></li>
         <% if logged_in? %>
         <%if current_user.try(:admin?)%>
           <li><%= link_to "ユーザ一覧",  :controller => "users", :action => "index"  %></li>
