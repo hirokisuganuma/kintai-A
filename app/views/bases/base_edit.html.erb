@@ -1,12 +1,11 @@
 <% provide(:title, '拠点情報の修正') %>
-<% provide(:button_text, '編集') %>
+
 <h1>拠点一覧</h1>
 <div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= render 'base_add_modal' %>
-<div class="modal fade" id="myModalLabel_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
-
-</div>
+    <div class="col-md-6 col-md-offset-3">
+        <%= render 'base_add_modal' %>
+        <div class="modal fade" id="myModalLabel_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
+    </div>
     <table class="table table-bordered working-table table-striped">
         <thead>
             <tr>
@@ -17,7 +16,6 @@
                 <th>勤怠種類</th>
             </tr>
         </thead>
-        <tbody>
             <% @bases.each do |base| %>
             <tr>
                 <td>
@@ -31,31 +29,9 @@
                 <td><%= base.name %></td>
                 <td><%= base.kind %></td>
             </tr>
-            
             <% end %>
     </table>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-  拠点情報の追加
-</button>
-
-
-
-<script>
-    
-    // 勤怠申請モーダルの値渡し
-    $(document).ready(function() {
-    $('.modal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) //モーダルを呼び出すときに使われたボタンを取得
-      var date = button.data('date') //data-date の値を取得
-      
-      //Ajaxの処理はここに
-    
-      var modal = $(this)  //モーダルを取得
-      modal.find('#modal-date').text(date) //モーダルの日付に値を表示
-      
-      
-      
-    })
-    });
-    
-</script>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        拠点情報の追加
+        </button>
+</div>
