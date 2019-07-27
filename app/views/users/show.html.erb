@@ -102,4 +102,7 @@
     </tfoot>
   </table>
 <% end %>
+<%if current_user.try(:admin?)%>
+  <%= render :template => "application/top"%>
+<% end %>
 </div>
