@@ -1,4 +1,5 @@
 <% provide(:title, '勤怠表示') %>
+<%if not current_user.try(:admin?)%>
 <div>
   <table class = "table-bordered table-condensed">
     <tr>
@@ -9,11 +10,10 @@
         <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),
                         class: "btn btn-xs btn-primary" %>
       </td>
-      <td>指定勤務時間　<%= format_basic_time(@user.specified_time) %></td>
-      <td>基本時間　<%= format_basic_time(@user.basic_time) %></td>
+      <td>指定勤務時間　<%= format_basic_time(@user.specified_time) %></td><!--指定開始時間枠予定-->
+      <td>基本時間　<%= format_basic_time(@user.basic_time) %></td><!--指定終了時間枠予定-->
       <td>初日　<%= @first_day.to_s(:date) %></td>
     </tr>
-
     <tr>
       <td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未設定" %></td>
       <td>氏名：<%= @user.name %></td>
@@ -24,26 +24,37 @@
   <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
   <table class = "table-bordered table-striped table-condensed">
     <thead>
-      <tr> 
-        <th rowspan = "2">日付</th>
-        <th rowspan = "2">曜日</th>
-        <th colspan = "3">出社</th>
-        <th colspan = "3">退社</th>
-        <th rowspan = "2">在社時間</th>
-        <th rowspan = "2">備考</th>
+      <tr>
+        <td rowspan="3" colspan="1" >残業申請</td>
+        <td rowspan="3" colspan="1">日付</td>
+        <td rowspan="3" colspan="1" >曜日</td>
+        <td rowspan="1" colspan="8" >【実績】</td>
+        <td rowspan="1" colspan="5" >所定外勤務</td>
       </tr>
       <tr>
-        <th>時</th>
-        <th>分</th>
-        <th></th>
-        <th>時</th>
-        <th>分</th>
-        <th></th>
+        <td rowspan="1" colspan="3">出社</td>
+        <td rowspan="1" colspan="3" >退社</td>
+        <td rowspan="2" colspan="1" >在社時間</td>
+        <td rowspan="2" colspan="1" >備考</td>
+        <td rowspan="1" colspan="2" >終了予定時刻</td>
+        <td rowspan="2" colspan="1" >時間外時間</td>
+        <td rowspan="2" colspan="1" >業務処理内容</td>
+        <td cellpadding="bottom" rowspan="2" colspan="1">指示者確認㊞</td>
       </tr>
-    </thead>
-
+      <tr>
+        <td >時</td>
+        <td >分</td>
+        <td></td>
+        <td >時</td>
+        <td >分</td>
+        <td></td>
+        <td >時</td>
+        <td >分</td> 
+      </tr>
+      </thead>
       <% (@works).each do |work| %>
         <tr>
+          <td><button class="btn btn-primary">残業申請</button></td><!--パラメータ渡し予定予定-->
           <td><%= work.day.strftime("%-m/%d")%></td>
           <td><% %w{日 月 火 水 木 金 土}[work.day.wday] %>
             <% if work.day.wday == 6 %><font color="BLUE">土</font>
@@ -72,6 +83,11 @@
               <% @total_seconds = @total_seconds.to_i + seconds %>
             <% end %>
           </td>
+          <td><%= work.remarks %></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
           <td></td>
         </tr>
       <% end %>
@@ -85,4 +101,5 @@
       </tr>
     </tfoot>
   </table>
+<% end %>
 </div>
