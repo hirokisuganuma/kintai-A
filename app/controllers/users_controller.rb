@@ -54,13 +54,13 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  def update
+  def update_by_admin
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
+      redirect_to users_path
     else
-      render 'edit'
+      redirect_to users_path
     end
   end
 
@@ -81,11 +81,18 @@ class UsersController < ApplicationController
   def working_users
     @users = User.get_working_user.paginate(page: params[:page])
   end
-  
-  private
 
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "アカウントを削除しました。"
+    redirect_to users_url
+  end
+  
+
+  private
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :affiliation, :basic_time, :specified_time)
+      params.require(:user).permit(:name, :email, :password, :affiliation, :basic_time,
+                                  :worker_number, :card_id, :start_time, :end_time)
     end
 
     def user_basic_params
@@ -102,7 +109,7 @@ class UsersController < ApplicationController
 
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(top_url) unless current_user?(@user)
+      redirect_to(users_url) unless current_user?(@user)
     end
 
     def admin_user

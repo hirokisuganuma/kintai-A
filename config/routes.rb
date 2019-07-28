@@ -13,10 +13,17 @@ Rails.application.routes.draw do
   get    'users/:id/edit_basic_info',to:'users#edit_basic_info',as:'edit_basic_info'
   patch  'users/:id/update_basic_info' , to: 'users#update_basic_info',as:'update_basic_info'
   get    '/users/working_users', to: 'users#working_users',as:'users_working_users'
-  resources :users do
-    resources :works, only: :create
-  end
   
+  resources :users do
+
+    resources :works, only: :create
+      
+    member do
+      patch  'update_by_admin', as: "update_by_admin"
+    end
+  end
+
+
   #work_edit resource
   get 'users/:id/works/:date/edit', to: 'works#edit', as: :edit_works
   patch 'users/:id/works/:date/update', to: 'works#update', as: :update_works
