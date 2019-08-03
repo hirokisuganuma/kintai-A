@@ -19,6 +19,7 @@ gem 'simple_form'
 gem 'rails-i18n'
 gem 'therubyracer'
 gem 'rounding'
+gem 'activerecord-import'
 group :development, :test do
   gem 'sqlite3', '1.3.13'
   gem 'byebug',  '9.0.6', platform: :mri
