@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   resources :users do
 
     resources :works, only: :create
+
+    get 'csv_output'
       
     member do
       patch  'update_by_admin', as: "update_by_admin"

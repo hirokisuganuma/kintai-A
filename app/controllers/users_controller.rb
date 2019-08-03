@@ -82,6 +82,12 @@ class UsersController < ApplicationController
     @users = User.get_working_user.paginate(page: params[:page])
   end
 
+  def csv_output
+    date=params[:date].to_datetime
+    @works = current_user.works.where(day: date.beginning_of_month..date.end_of_month ).order(:day)
+    send_data render_to_string, filename: "#{current_user.name}_#{params[:date].to_time.strftime("%Y年 %m月")}.csv", type: :csv
+  end
+
   def destroy
     User.find(params[:id]).destroy
     flash[:success] = "アカウントを削除しました。"

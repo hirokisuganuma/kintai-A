@@ -22,6 +22,7 @@
     </tr>
   </table>
   <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
+  <%= link_to "csv出力",user_csv_output_path(@user, format: :csv, date: @first_day), {class: "btn btn-primary", id: "csv"} %>
   <table class = "table-bordered table-striped table-condensed">
     <thead>
       <tr>
