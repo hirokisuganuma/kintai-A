@@ -3,12 +3,31 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info]
 
+  require 'csv'
+
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
       if current_user.admin?
       else
         redirect_to(root_path) 
         flash[:warning] = "ほかのユーザにはアクセスできません"
+      end
+
+      if params[:commit] == "CSVをインポート"
+      
+        if params[:users_file].content_type == "text/csv"
+            registered_count = import_users
+            unless @errors.count == 0
+              flash[:danger] = "#{@errors.count}件登録に失敗しました"
+            end
+            unless registered_count == 0
+              flash[:success] = "#{registered_count}件登録しました"
+            end
+            redirect_to users_url(error_users: @errors)
+        else
+          flash[:danger] = "CSVファイルのみ有効です"
+          redirect_to users_url
+        end
       end
   end
 
@@ -96,6 +115,31 @@ class UsersController < ApplicationController
   
 
   private
+
+  # CSVインポート
+  def import_users
+    # 登録処理前のレコード数
+    current_user_count = ::User.count
+    users = []
+    @errors = []
+    # windowsで作られたファイルに対応するので、encoding: "SJIS"を付けている
+    CSV.foreach(params[:users_file].path, headers: true, encoding: "SJIS") do |row|
+      user = User.new({ id: row["id"], name: row["name"], email: row["email"], affiliation: row["affiliation"], worker_number: row["worker_number"], card_id: row["card_id"], basic_time: row["basic_time"], 
+                        start_time: row["start_time"], end_time: row["end_time"], sv: row["sv"], admin: row["admin"], password: row["password"]})
+      if user.valid?
+          users << ::User.new({ id: row["id"], name: row["name"], email: row["email"], affiliation: row["affiliation"], worker_number: row["worker_number"], card_id: row["card_id"], basic_time: row["basic_time"], 
+          start_time: row["start_time"], end_time: row["end_time"], sv: row["sv"], admin: row["admin"], password: row["password"]})
+      else
+        @errors << user.errors.inspect
+        Rails.logger.warn(user.errors.inspect)
+      end
+    end
+    # importメソッドでバルクインサートできる
+    ::User.import(users)
+    # 何レコード登録できたかを返す
+    ::User.count - current_user_count
+  end
+  
     def user_params
       params.require(:user).permit(:name, :email, :password, :affiliation, :basic_time,
                                   :worker_number, :card_id, :start_time, :end_time)
@@ -122,4 +166,6 @@ class UsersController < ApplicationController
       redirect_to(top_url) unless current_user.admin?
     end
     
+
+  
 end

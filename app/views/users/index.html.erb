@@ -1,6 +1,24 @@
 <% provide(:title, '一覧') %>
 <h1>ユーザ一覧</h1>
 
+<% if params[:error_users] %>
+  <a  data-toggle="modal" data-target="#sampleModal">
+    インポートエラーログ<%= "#{params[:error_users].count}件" %>
+  </a>
+<% end %>
+
+<%= form_tag users_path, method: 'post', multipart: true do %>
+  <div class="input-group" style="width: 300px;">
+    <span class="input-group-btn">
+      <%= button_tag 'ファイル選択', class: %i(btn btn-default csv_input_btn), type: 'button', onclick: "$('#file_input').click();" %>
+    </span>
+    <%= file_field_tag 'users_file', id: "file_input", style: "display: none;", onchange: "file_selected($(this));" , required: "required" %>
+    <%= text_field_tag 'filename',"", id: "filename", disabled: true, class:"form-control", placeholder: 'CSVファイルを選択' %>
+  </div>
+  <br>
+  <%= submit_tag 'CSVをインポート', class: "btn btn-primary csv_submit" %>
+<% end %>
+
 <section class="container">
 <div class="col-md-3 col-md-offset-8 ">
 <p>ユーザー名検索</p>
@@ -16,3 +34,17 @@
   <%= render @users %>
 </ul>
 <%= will_paginate %>
+
+<script type="text/javascript">
+  function file_selected(file_field){
+    var filename = $(file_field)[0].files[0].name;
+    $("#filename").val(filename);
+  }
+</script>
+
+<style>
+.csv_submit  {
+        width: 300px;
+        height: 40px;
+    }
+</style>
