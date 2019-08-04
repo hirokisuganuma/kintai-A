@@ -12,23 +12,6 @@ class UsersController < ApplicationController
         redirect_to(root_path) 
         flash[:warning] = "ほかのユーザにはアクセスできません"
       end
-
-      if params[:commit] == "CSVをインポート"
-      
-        if params[:users_file].content_type == "text/csv"
-            registered_count = import_users
-            unless @errors.count == 0
-              flash[:danger] = "#{@errors.count}件登録に失敗しました"
-            end
-            unless registered_count == 0
-              flash[:success] = "#{registered_count}件登録しました"
-            end
-            redirect_to users_url(error_users: @errors)
-        else
-          flash[:danger] = "CSVファイルのみ有効です"
-          redirect_to users_url
-        end
-      end
   end
 
   def show
@@ -59,6 +42,22 @@ class UsersController < ApplicationController
   end
 
   def create
+
+    if params[:commit] == "CSVをインポート"
+      if params[:users_file].content_type == "text/csv"
+          registered_count = import_users
+          unless @errors.count == 0
+            flash[:danger] = "#{@errors.count}件登録に失敗しました"
+          end
+          unless registered_count == 0
+            flash[:success] = "#{registered_count}件登録しました"
+          end
+          redirect_to users_url(error_users: @errors)
+      else
+        flash[:danger] = "CSVファイルのみ有効です"
+        redirect_to users_url
+      end
+    else
     @user = User.new(user_params)
       if @user.save
         log_in @user
@@ -67,6 +66,7 @@ class UsersController < ApplicationController
       else
         render 'new'      
       end
+    end
   end
 
   def edit
@@ -139,7 +139,7 @@ class UsersController < ApplicationController
     # 何レコード登録できたかを返す
     ::User.count - current_user_count
   end
-  
+
     def user_params
       params.require(:user).permit(:name, :email, :password, :affiliation, :basic_time,
                                   :worker_number, :card_id, :start_time, :end_time)
