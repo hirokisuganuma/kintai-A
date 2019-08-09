@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 20190809004030) do
     t.time "specified_time", default: "2000-01-01 23:00:00"
     t.boolean "admin", default: false
     t.boolean "sv"
-    t.datetime "start_time"
-    t.datetime "end_time"
+    t.datetime "start_time", default: "2019-08-08 23:30:00"
+    t.datetime "end_time", default: "2019-08-09 08:30:00"
     t.integer "worker_number"
     t.integer "card_id"
     t.index ["email"], name: "index_users_on_email", unique: true

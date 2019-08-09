@@ -10,7 +10,7 @@
         <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),
                         class: "btn btn-xs btn-primary" %>
       </td>
-      <td>指定勤務時間　<%= format_basic_time(@user.specified_time) %></td><!--指定開始時間枠予定-->
+      <td>指定勤務時間　<%= format_basic_time(@user.start_time) %></td><!--指定開始時間枠予定-->
       <td>基本時間　<%= format_basic_time(@user.basic_time) %></td><!--指定終了時間枠予定-->
       <td>初日　<%= @first_day.to_s(:date) %></td>
     </tr>
@@ -70,6 +70,7 @@
               <%= button_to "出社", user_works_path(@user), class: "btn btn-xs btn-primary" %>
             <% end %>
           </td>
+          
           <td><%= work.leaving_time.strftime("%H") if work.leaving_time.present? %></td>
           <td><%= work.leaving_time.strftime("%M") if work.leaving_time.present? %></td>
           <td>
