@@ -114,7 +114,8 @@ class UsersController < ApplicationController
   end
   
   def create_overwork
-    @work = Work.find(params[:id])
+    @user = User.find(params[:id])
+    @work = @user.works.find_by(id: work.id)
     @work.update_attributes(create_overwork_params)
   end
 
