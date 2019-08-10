@@ -30,4 +30,13 @@ class User < ApplicationRecord
 
   #validates :specified_time,  presence: true 
 
+    
+  def User.get_sv_user_whithout_myself(session)
+    if User.find(session[:user_id]).sv == true
+      where(sv: true).where.not(id: session[:user_id]).order(:id)
+    else
+      where(sv: true).order(:id)
+    end
+  end
+  
 end

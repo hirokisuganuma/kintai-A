@@ -13,6 +13,30 @@ User.create!(name:  "管理者",
   admin:     true,
   )
 
+  User.create!(name:  "上長１",
+  email: "sv1@gmail.org",
+  password:              "password",
+  password_confirmation: "password",
+  affiliation: "本社",
+  sv:     true,
+  )
+
+  User.create!(name:  "上長2",
+  email: "sv2@gmail.org",
+  password:              "password",
+  password_confirmation: "password",
+  affiliation: "本社",
+  sv:     true,
+  )
+
+  User.create!(name:  "上長3",
+  email: "sv3@gmail.org",
+  password:              "password",
+  password_confirmation: "password",
+  affiliation: "本社",
+  sv:     true,
+  )
+
   59.times do |n|
     name  = Faker::Name.name
     email = "email#{n+1}@sample.com"

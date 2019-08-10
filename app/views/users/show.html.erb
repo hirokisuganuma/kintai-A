@@ -55,7 +55,12 @@
       </thead>
       <% (@works).each do |work| %>
         <tr>
-          <td><button class="btn btn-primary">残業申請</button></td><!--パラメータ渡し予定予定-->
+          <td>
+            <button class="btn btn-primary" data-toggle="modal1" data-target="#modal" data-date="<%=work.day.month%>/<%=work.day.day%>" data-date_1="<%=work.day.year%>-<%=work.day.month%>-<%=work.day.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[work.day.wday]%>">
+              残業申請
+            </button>
+            <%= render 'modal_r_overwork' %>
+          </td>
           <td><%= work.day.strftime("%-m/%d")%></td>
           <td><% %w{日 月 火 水 木 金 土}[work.day.wday] %>
             <% if work.day.wday == 6 %><font color="BLUE">土</font>
@@ -108,3 +113,24 @@
   <%= render :template => "application/top"%>
 <% end %>
 </div>
+
+<script>
+// 勤怠申請モーダルの値渡し
+    $(document).ready(function() {
+    $('#modal1').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) //モーダルを呼び出すときに使われたボタンを取得
+      var date = button.data('date') //data-date の値を取得
+      var day = button.data('day') //data-day の値を取得
+      var date_1 = button.data('date_1') //data-date_1 の値を取得
+      
+      //Ajaxの処理はここに
+    
+      var modal = $(this)  //モーダルを取得
+      modal.find('#modal-date').text(date) //モーダルの日付に値を表示
+      modal.find('#modal-day').text(day) //モーダルの曜日に値を表示
+      modal.find('#test').val(date_1)
+      
+      
+    })
+    });
+</script>

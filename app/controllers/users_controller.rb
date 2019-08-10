@@ -113,6 +113,10 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
+  def create_overwork
+    @work = Work.find(params[:id])
+    @work.update_attributes(create_overwork_params)
+  end
 
   private
 
@@ -166,6 +170,8 @@ class UsersController < ApplicationController
       redirect_to(top_url) unless current_user.admin?
     end
     
-
+    def create_overwork_params
+      params.require(:work).permit(:over_time_end, :over_time_work, :over_time_request, :day, :check_box)
+    end
   
 end

@@ -56,6 +56,8 @@ class WorksController < ApplicationController
     redirect_to user_url(@user, params:{first_day: params[:date]})
   end
 
+
+
   private
     def works_params
       params.permit(works: [:attendance_time, :leaving_time, :remarks])[:works]
