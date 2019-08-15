@@ -112,13 +112,42 @@ class UsersController < ApplicationController
     flash[:success] = "アカウントを削除しました。"
     redirect_to users_url
   end
-  
+
   def create_overwork
-    @user = User.find(params[:id])
-    @work = @user.works.find_by(id: work.id)
-    @work.update_attributes(create_overwork_params)
+    time_change = time_change(params[:work][:day], params[:work][:over_time_end])
+    @work=select_user.works.find_by(day: params[:work][:day])
+    if params[:work][:check_box]=="true"
+        date_tomorrow=time_change.tomorrow - 9.hours
+        @work.update_attributes(create_overwork_params)
+        @work.update(over_time_end: date_tomorrow)
+        @work.save(validate: false)
+    else
+        @work.update_attributes(create_overwork_params)
+        @work.update(over_time_end: time_change-9.hours)
+        @work.save(validate: false)
+    end
+    flash[:success] = "申請しました！"
+    redirect_to  user_path(select_user,Date.today)
   end
 
+  def update_overwork
+    if params[:commit] == "確認"
+        return
+    end
+    update_count = 0
+    update_overwork_params.each do |id, item|
+        work = Work.find(id)
+        if item.fetch("check_box")=="true"
+            work.update_attributes(over_time_request: item.fetch("over_time_request"))
+            work.save(validate: false)
+            update_count+=1
+        end
+    end
+    flash[:success] = "#{update_overwork_params.keys.count}件中#{update_count}件、残業申請を更新しました!"
+    redirect_to  user_path(current_user,Date.today)
+    
+  end
+  
   private
 
   # CSVインポート
@@ -174,5 +203,13 @@ class UsersController < ApplicationController
     def create_overwork_params
       params.require(:work).permit(:over_time_end, :over_time_work, :over_time_request, :day, :check_box)
     end
+
+    def update_overwork_params
+      params.permit(works: [:over_time_request, :check_box])[:works]
+    end
+    
   
+    def select_user
+      @user = User.find(params[:id])
+    end
 end

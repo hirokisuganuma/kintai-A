@@ -1,5 +1,9 @@
 module WorksHelper
 
+  def select_user
+    @user = User.find(params[:id])
+  end
+
   def current_time
     Time.new(
       Time.now.year,
@@ -9,6 +13,49 @@ module WorksHelper
       Time.now.min, 0
     ).round_to(15.minutes)
   end
+
+  def time_change(day, time)
+    day=day.to_datetime
+    time=time.to_datetime
+    Time.new(day.year,day.month,day.day,time.hour,time.min,time.sec)
+  end
+  
+  def overwork_time(over_work)
+    a=over_work.day
+    a_1=over_work.over_time_end
+    b=select_user.end_time
+    c=Time.new(a.year,a.month,a.day,b.hour,b.min,b.sec)
+    d=Time.new(a_1.year,a_1.month,a_1.day,a_1.hour,a_1.min,a_1.sec)
+    (d-c)/60/60
+  end
+
+  def over_check(work)
+    if work
+      work && work.over_time_request
+      if work.over_time_request=="上長A" || work.over_time_request=="上長B" || work.over_time_request=="上長C"
+        "残業を#{work.over_time_request}に申請中"
+      elsif work.over_time_request=="否認"
+        "残業否認"
+      elsif work.over_time_request=="承認"
+        "残業承認済"
+      end
+    end
+  end
+
+  #def work_check(work)
+  #  if work
+  #    work && work.over_time_request
+  #    if work.over_time_request=="上長A" || work.over_time_request=="上長B" || work.over_time_request=="上長C"
+  #      "勤怠変更を#{work.over_time_request}に申請中"
+  #    elsif work.over_time_request=="否認"
+  #      "勤怠変更否認"
+  #    elsif work.over_time_request=="承認"
+  #      "勤怠変更承認済"
+  #    end
+  #  end
+  #end
+
+
 
   def working_times(started_at, finished_at)
     format("%.2f", (((finished_at - started_at) / 60) / 60.0))

@@ -21,8 +21,25 @@
       <td>締日　<%= @last_day.to_s(:date) %></td>
     </tr>
   </table>
-  <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
-  <%= link_to "csv出力",user_csv_output_path(@user, format: :csv, date: @first_day), {class: "btn btn-primary", id: "csv"} %>
+    <%if current_user.try(:sv?)%>
+      <% @name=current_user.name %>
+
+      <% if Work.find_by(over_time_request: @name) %>
+        <% request_state_count=Work.where(over_time_request: @name).count %>
+          <a id="over_work" data-toggle="modal" data-target="#modal-overwork" >
+            <%= "【残業申請のお知らせ】 #{request_state_count}件 " %>
+          </a><br>
+          <%= render 'modal_s_over_work' %>
+      <% else %>
+          <div id="blue">
+            <%= "【残業申請のお知らせ】" %>
+          </div>
+    <% end %>
+
+
+    <%end%>
+    <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
+    <%= link_to "csv出力",user_csv_output_path(@user, format: :csv, date: @first_day), {class: "btn btn-primary", id: "csv"} %>
   <table class = "table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -91,11 +108,11 @@
             <% end %>
           </td>
           <td><%= work.remarks %></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><%= work.over_time_end.strftime("%H") if work.over_time_end %></td>
+          <td><%= work.over_time_end.strftime("%M") if work.over_time_end %></td>
+          <td><%=sprintf("%.2f", overwork_time(work)) if work.over_time_end %></td>
+          <td><%= work.over_time_work %></td>
+          <td><%=over_check(work)%></td>
         </tr>
       <% end %>
     </tbody>
