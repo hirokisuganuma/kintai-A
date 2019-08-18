@@ -16,6 +16,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @month_work = @user.works.find_by(day: params[:id])
     if    current_user.admin? 
     elsif current_user != User.find(params[:id]) 
         redirect_to(root_url) 
@@ -147,6 +148,18 @@ class UsersController < ApplicationController
     redirect_to  user_path(current_user,Date.today)
     
   end
+
+  def create_monthwork
+    if params[:work]&&!params[:work][:piyo].blank?
+        @date = params[:work][:piyo].to_datetime
+    else
+        @date = params[:id].to_datetime
+    end
+    day = Date.new(@date.year,@date.month)
+            current_user.works.find_by(day: day).update(month_request: params[:work][:month_request])
+    flash[:success] = "申請しました!(１ヶ月分)"
+    redirect_to  user_path(select_user,Date.today)
+end
   
   private
 

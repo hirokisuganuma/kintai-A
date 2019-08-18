@@ -24,6 +24,8 @@ Rails.application.routes.draw do
       patch  'update_by_admin', as: "update_by_admin"
       patch 'create_overwork'
       patch 'update_overwork'
+      patch 'update_monthwork'
+      patch 'create_monthwork'
     end
   end
 

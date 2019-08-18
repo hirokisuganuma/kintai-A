@@ -42,6 +42,15 @@ module WorksHelper
     end
   end
 
+  def month_check_window(works)
+      day = works.day.beginning_of_month
+    if current_user.works.find_by(day: day).nil? || current_user.works.find_by(day: day).month_request.nil?
+      "未"
+    else
+      current_user.works.find_by(day: day).month_request
+    end
+  end
+
   #def work_check(work)
   #  if work
   #    work && work.over_time_request

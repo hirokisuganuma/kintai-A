@@ -114,6 +114,8 @@
           <td><%= work.over_time_work %></td>
           <td><%=over_check(work)%></td>
         </tr>
+
+        <%@mday = work%>
       <% end %>
     </tbody>
   <tfoot>
@@ -121,8 +123,24 @@
         <td colspan = "2"><%= format_basic_time(@user.basic_time).to_f * @worked_sum %></td>
         <td colspan = "6"></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
-        <td></td>
-      </tr>
+        <td>所属長承認   %><br>
+                              <%binding.pry%>
+        <%#@works = Work.find_by(day: @mday)%>
+              <%= form_for @works, :url => { :controller => :users, :action => :create_monthwork },method: :patch do %>
+
+                  <%= fields_for "work", @works do |fi| %>
+                      <%= fi.collection_select(:month_request, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
+                  <% end %>
+                  
+                  <%= fields_for "work", @works do |fi| %>
+                      <%= fi.hidden_field :piyo, :value => params[:piyo] %>
+                  <% end %>
+                  
+                  <%= submit_tag "申請", class: "btn btn-primary" %>
+                  
+              <% end %>
+        </td>
+    </tr>
     </tfoot>
   </table>
 <% end %>
