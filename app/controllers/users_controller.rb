@@ -133,6 +133,7 @@ class UsersController < ApplicationController
 
   def update_overwork
     if params[:commit] == "確認"
+      #今後確認用パスを投げる
         return
     end
     update_count = 0
@@ -153,14 +154,32 @@ class UsersController < ApplicationController
     if params[:work]&&!params[:work][:piyo].blank?
         @date = params[:work][:piyo].to_datetime
     else
-        @date = params[:id].to_datetime
+        @date = params[:day].to_datetime
     end
     day = Date.new(@date.year,@date.month)
             current_user.works.find_by(day: day).update(month_request: params[:work][:month_request])
     flash[:success] = "申請しました!(１ヶ月分)"
     redirect_to  user_path(select_user,Date.today)
-end
+  end
   
+  def update_monthwork
+    if params[:commit] == "確認"
+        #今後確認用パスを投げる
+        return
+    end
+    update_count = 0
+    update_monthwork_params.each do |id, item|
+        work = Work.find(id)
+        if item.fetch("check_box")=="true"
+            work.update_attributes(month_request: item.fetch("month_request"))
+            work.save(validate: false)
+            update_count+=1
+        end
+    end
+    flash[:success] = "#{update_monthwork_params.keys.count}件中#{update_count}件、１ヶ月申請を更新しました!"
+    #セレクトユーザーの編集した月ページへ
+    redirect_to  user_path(current_user,Date.today)
+end
   private
 
   # CSVインポート
@@ -221,6 +240,9 @@ end
       params.permit(works: [:over_time_request, :check_box])[:works]
     end
     
+    def update_monthwork_params
+      params.permit(works: [:month_request, :check_box])[:works]
+    end
   
     def select_user
       @user = User.find(params[:id])

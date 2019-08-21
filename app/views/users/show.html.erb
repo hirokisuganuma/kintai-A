@@ -34,8 +34,18 @@
           <div id="blue">
             <%= "【残業申請のお知らせ】" %>
           </div>
-    <% end %>
-
+      <% end %>
+      <% if Work.find_by(month_request: @name) %>
+        <% request_state_count=Work.where(month_request: @name).count %>
+        <a id="month" data-toggle="modal" data-target="#modal-monthwork" >
+          <%= "【所属長承認申請のお知らせ】 #{request_state_count}件 " %>
+        </a><br>
+        <%= render 'modal_s_monthwork' %>
+      <% else %>
+        <div id="blue">
+          <%= "【所属長承認申請のお知らせ】" %>
+        </div>
+      <% end %>
 
     <%end%>
     <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
@@ -115,7 +125,7 @@
           <td><%=over_check(work)%></td>
         </tr>
 
-        <%@mday = work%>
+        <%@mday = work%> 
       <% end %>
     </tbody>
   <tfoot>
@@ -123,22 +133,22 @@
         <td colspan = "2"><%= format_basic_time(@user.basic_time).to_f * @worked_sum %></td>
         <td colspan = "6"></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
-        <td>所属長承認   %><br>
-                              <%binding.pry%>
-        <%#@works = Work.find_by(day: @mday)%>
-              <%= form_for @works, :url => { :controller => :users, :action => :create_monthwork },method: :patch do %>
+        <td>所属長承認  <%= month_check_window(@mday) %><br>
+        <% @works = Work.find_by(day: @mday.day.beginning_of_month) %>
 
-                  <%= fields_for "work", @works do |fi| %>
-                      <%= fi.collection_select(:month_request, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
-                  <% end %>
-                  
-                  <%= fields_for "work", @works do |fi| %>
-                      <%= fi.hidden_field :piyo, :value => params[:piyo] %>
-                  <% end %>
-                  
-                  <%= submit_tag "申請", class: "btn btn-primary" %>
-                  
-              <% end %>
+          <%= form_for @works, :url => { :controller => :users, :action => :create_monthwork, :day => @works.day},method: :patch do %><!--多分やるならURLにdayをくっつけるのが吉っぽい-->
+            <%= fields_for "work", @works do |fi| %>
+              <%= fi.collection_select(:month_request, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
+            <% end %>
+            
+            <%= fields_for "work", @works do |fi| %>
+              <%= fi.hidden_field @works, :value => params[:day] %>
+
+            <% end %>
+                    
+            <%= submit_tag "申請", class: "btn btn-primary" %>
+
+          <% end %>
         </td>
     </tr>
     </tfoot>

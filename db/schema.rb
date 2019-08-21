@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 20190818023424) do
     t.time "specified_time", default: "2000-01-01 23:00:00"
     t.boolean "admin", default: false
     t.boolean "sv"
-    t.datetime "start_time", default: "2019-08-10 23:30:00"
-    t.datetime "end_time", default: "2019-08-11 08:30:00"
+    t.datetime "start_time", default: "2019-08-09 23:30:00"
+    t.datetime "end_time", default: "2019-08-10 08:30:00"
     t.integer "worker_number"
     t.integer "card_id"
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20190818023424) do
     t.string "over_time_instructor"
     t.string "over_time_request"
     t.boolean "check_box"
+    t.string "month_time_request"
     t.string "month_request"
     t.index ["user_id"], name: "index_works_on_user_id"
   end
