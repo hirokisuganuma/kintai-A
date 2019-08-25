@@ -37,6 +37,20 @@ class WorksController < ApplicationController
           if work.day > Date.current && !current_user.admin?
             flash[:warning] = '一部編集が無効となった項目があります。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
+            if time.fetch("attendance_time").present?
+              attendance_time = Time.parse("#{work.day} #{time.fetch("attendance_time")}") - 9.hour
+            else
+              attendance_time = nil
+            end
+            if time.fetch("leaving_time").present?
+              if item[:check_tomorrow] == "true"
+                  leaving_time = Time.parse("#{work.day} #{time.fetch("leaving_time")}").tomorrow - 9.hour
+              else
+                leaving_time = Time.parse("#{work.day} #{time.fetch("leaving_time")}") - 9.hour 
+              end
+            else
+              leaving_time = nil
+            end
           elsif time["attendance_time"].blank? && time["leaving_time"].blank?
           elsif time["attendance_time"].blank? || time["leaving_time"].blank?
             flash[:warning] = '一部編集が無効となった項目があります。'
@@ -49,18 +63,22 @@ class WorksController < ApplicationController
           elsif time["leaving_time"] !~ /\d{2}:00|15|30|45/ then flash[:warning] = '入力は１５分間隔でお願いします。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           else
-                work.update_attributes(time)
+            binding.pry
+            work.update_attributes(attendance_after_chenge: attendance_time,
+              liaving_after_chenge: leaving_time, 
+              remarks: time[:remarks], 
+              change_request: time[:change_request], 
+              check_tomorrow: time[:check_tomorrow])
+              work.save(validate: false)
                   flash[:success] = '勤怠時間を更新しました。なお本日以降の更新はできません。'
           end
       end 
     redirect_to user_url(@user, params:{first_day: params[:date]})
   end
 
-
-
   private
     def works_params
-      params.permit(works: [:attendance_time, :leaving_time, :remarks])[:works]
+      params.permit(works: [:attendance_time, :leaving_time, :remarks, :change_request, :check_tomorrow, :attendance_after_chenge, :liaving_after_chenge])[:works]
     end
 
 end

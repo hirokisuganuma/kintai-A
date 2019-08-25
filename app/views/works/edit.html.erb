@@ -9,8 +9,10 @@
           <th>曜日</th>
           <th>出勤時間</th>
           <th>退勤時間</th>
+          <th>翌日</th>
           <th>在社時間</th>
           <th>備考</th>
+          <th>指示者確認㊞</th>
         </tr>
       </thead>
       <tbody>
@@ -19,14 +21,20 @@
             <tr>
               <td><%= work.day.strftime("%-m/%d") %></td>
               <td><%= %w{日 月 火 水 木 金 土}[work.day.wday] %></td>
-              <td><%= af.time_field :attendance_time, class: "form-control" %></td>
-              <td><%= af.time_field :leaving_time, class: "form-control" %></td>
+              <td><%= af.time_field :attendance_time, class: "form-control" %><%= af.hidden_field :attendance_after_chenge, class: "form-control" %></td>
+              <td><%= af.time_field :leaving_time, class: "form-control" %><%= af.hidden_field :liaving_after_chenge, class: "form-control" %></td>
+              <td class="center">
+                <%= af.check_box :check_tomorrow,{},checked_value = "true",unchecked_value = "false" %>
+              </td>
               <td>
                 <% if work.attendance_time.present? && work.leaving_time.present? %>
                   <%= working_times(work.attendance_time, work.leaving_time) %>
                 <% end %>
               </td>
               <td><%= af.text_field :remarks, class: "form-control" %></td>
+              <td>
+                <%= af.collection_select :change_request, User.get_sv_user_whithout_myself(session), :name, :name, :include_blank => true %>
+              </td>
             </tr>
           <% end %>
         <% end %>

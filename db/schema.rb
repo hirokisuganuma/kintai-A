@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190818023424) do
+ActiveRecord::Schema.define(version: 20190825041202) do
 
   create_table "bases", force: :cascade do |t|
     t.string "name"
@@ -53,6 +53,10 @@ ActiveRecord::Schema.define(version: 20190818023424) do
     t.boolean "check_box"
     t.string "month_time_request"
     t.string "month_request"
+    t.string "change_request"
+    t.boolean "check_tomorrow"
+    t.datetime "attendance_after_chenge"
+    t.datetime "liaving_after_chenge"
     t.index ["user_id"], name: "index_works_on_user_id"
   end
 

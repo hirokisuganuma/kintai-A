@@ -46,7 +46,17 @@
           <%= "【所属長承認申請のお知らせ】" %>
         </div>
       <% end %>
-
+      <% if Work.find_by(change_request: @name) %>
+          <% request_state_count=Work.where(change_request: @name).count %>
+            <a id="change_work" data-toggle="modal" data-target="#modal-changework" >
+                <%= "【勤怠変更申請のお知らせ】 #{request_state_count}件 " %>
+            </a><br>
+            <%= render 'modal_s_changework' %>
+      <% else %>
+            <div id="blue">
+                <%= "【勤怠変更申請のお知らせ】" %>
+            </div>
+      <% end %>
     <%end%>
     <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
     <%= link_to "csv出力",user_csv_output_path(@user, format: :csv, date: @first_day), {class: "btn btn-primary", id: "csv"} %>
