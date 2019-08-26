@@ -63,12 +63,12 @@ class WorksController < ApplicationController
           elsif time["leaving_time"] !~ /\d{2}:00|15|30|45/ then flash[:warning] = '入力は１５分間隔でお願いします。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           else
-            binding.pry
-            work.update_attributes(attendance_after_chenge: attendance_time,
-              liaving_after_chenge: leaving_time, 
-              remarks: time[:remarks], 
-              change_request: time[:change_request], 
-              check_tomorrow: time[:check_tomorrow])
+            time["attendance_after_chenge"] = time["attendance_time"]
+            time["liaving_after_chenge"] = time["leaving_time"]
+            #binding.pry
+            time.delete("attendance_time")
+            time.delete("leaving_time")
+            work.update_attributes(time)
               work.save(validate: false)
                   flash[:success] = '勤怠時間を更新しました。なお本日以降の更新はできません。'
           end
