@@ -65,7 +65,6 @@ class WorksController < ApplicationController
           else
             time["attendance_after_chenge"] = time["attendance_time"]
             time["liaving_after_chenge"] = time["leaving_time"]
-            #binding.pry
             time.delete("attendance_time")
             time.delete("leaving_time")
             work.update_attributes(time)

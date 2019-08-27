@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       patch 'update_overwork'
       patch 'update_monthwork'
       patch 'create_monthwork'
+      patch 'update_changework'
     end
   end
 

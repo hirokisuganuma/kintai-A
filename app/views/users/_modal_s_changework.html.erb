@@ -60,11 +60,11 @@
             <td><%= work.attendance_time.min if work.attendance_time %></td><!--分-->
             <td><%= work.leaving_time.hour if work.leaving_time %></td><!--退社：時-->
             <td><%= work.leaving_time.min if work.leaving_time %></td><!--分-->
-            <td><%= work.starttime_change.hour if work.starttime_change %></td><!--出社：時-->
-            <td><%= work.starttime_change.min if work.starttime_change %></td><!--分-->
-            <td><%= work.endtime_change.hour if work.endtime_change %><br><%= "(翌日)" if work.endtime_change && work.endtime_change.day == work.day.tomorrow.day %></td><!--退社：時-->
-            <td><%= work.endtime_change.min if work.endtime_change %></td><!--分-->
-            <td><%= work.note %></td><!--備考-->
+            <td><%= work.attendance_after_chenge.hour if work.attendance_after_chenge %></td><!--出社：時-->
+            <td><%= work.attendance_after_chenge.min if work.attendance_after_chenge %></td><!--分-->
+            <td><%= work.liaving_after_chenge.hour if work.liaving_after_chenge %><br><%= "(翌日)" if work.liaving_after_chenge && work.liaving_after_chenge.day == work.day.tomorrow.day %></td><!--退社：時-->
+            <td><%= work.liaving_after_chenge.min if work.liaving_after_chenge %></td><!--分-->
+            <td><%= work.remarks %></td><!--備考-->
             <td>
                 <%= fields_for "works[]", work do |fi| %>
                     <%= fi.select :change_request, [["なし", "なし"],["申請中", "#{current_user.name}"],["承認", "承認"],["否認", "否認"]], {prompt: ""}, { class: 'form-control'} %>
