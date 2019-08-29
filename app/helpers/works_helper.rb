@@ -51,20 +51,18 @@ module WorksHelper
     end
   end
 
-  #def work_check(work)
-  #  if work
-  #    work && work.over_time_request
-  #    if work.over_time_request=="上長A" || work.over_time_request=="上長B" || work.over_time_request=="上長C"
-  #      "勤怠変更を#{work.over_time_request}に申請中"
-  #    elsif work.over_time_request=="否認"
-  #      "勤怠変更否認"
-  #    elsif work.over_time_request=="承認"
-  #      "勤怠変更承認済"
-  #    end
-  #  end
-  #end
-
-
+  def work_check(work)
+    if work
+      work && work.change_request
+      if work.change_request=="上長A" || work.change_request=="上長B" || work.change_request=="上長C"
+        "勤怠変更を#{work.change_request}に申請中"
+      elsif work.change_request=="否認"
+        "勤怠変更否認"
+      elsif work.change_request=="承認"
+        "勤怠変更承認済"
+      end
+    end
+  end
 
   def working_times(started_at, finished_at)
     format("%.2f", (((finished_at - started_at) / 60) / 60.0))

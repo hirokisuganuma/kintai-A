@@ -180,6 +180,35 @@ class UsersController < ApplicationController
     #セレクトユーザーの編集した月ページへ
     redirect_to  user_path(current_user,Date.today)
 end
+
+
+def update_changework
+  if params[:commit] == "確認"
+      #今後確認用パス投げる
+      return
+  end
+  update_count = 0
+  update_changework_params.each do |id, item|
+      work = Work.find_by(id: id)
+      if item[:change_request] == "承認" && item.fetch("check_box") == "true"
+          ## 勤怠ログの作成
+          #WorkLog.create!(user_id: work.user_id, work_id: work.id, day: work.day, start_time: work.start_time, end_time: work.end_time,
+          #                starttime_change: work.starttime_change, endtime_change: work.endtime_change, work_check: work.work_check )
+          # 勤怠変更申請（更新）
+          work.update(change_request: item[:change_request], attendance_time: work.attendance_time, leaving_time: work.leaving_time)
+          update_count+=1
+      elsif item.fetch("check_box") == "true"
+          work.update(item)
+          work.update(check_box: "false")
+          update_count+=1
+      end
+  end
+  flash[:success] = "#{update_changework_params.keys.count}件中#{update_count}件、勤怠変更申請を更新しました!"
+#セレクトユーザーの編集した月ページへ
+redirect_to  user_path(current_user,Date.today)
+
+end
+
   private
 
   # CSVインポート
@@ -242,6 +271,10 @@ end
     
     def update_monthwork_params
       params.permit(works: [:month_request, :check_box])[:works]
+    end
+
+    def update_changework_params
+      params.permit(works: [:change_request, :check_box])[:works]
     end
   
     def select_user

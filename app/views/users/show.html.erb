@@ -132,7 +132,9 @@
           <td><%= work.over_time_end.strftime("%M") if work.over_time_end %></td>
           <td><%=sprintf("%.2f", overwork_time(work)) if work.over_time_end %></td>
           <td><%= work.over_time_work %></td>
-          <td><%=over_check(work)%></td>
+          <td><%=over_check(work)%>
+              <%= work_check(work) %>
+          </td>
         </tr>
 
         <%@mday = work%> 
