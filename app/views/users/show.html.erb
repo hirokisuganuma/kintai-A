@@ -60,6 +60,7 @@
     <%end%>
     <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
     <%= link_to "csv出力",user_csv_output_path(@user, format: :csv, date: @first_day), {class: "btn btn-primary", id: "csv"} %>
+    <%= link_to "勤怠修正ログ（承認済）", work_logs_path(@user,@first_day), class: "btn btn-primary" %>
   <table class = "table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -136,19 +137,24 @@
               <%= work_check(work) %>
           </td>
         </tr>
-
         <%@mday = work%> 
       <% end %>
     </tbody>
   <tfoot>
       <tr>
+        <td></td>
         <td colspan = "2"><%= format_basic_time(@user.basic_time).to_f * @worked_sum %></td>
         <td colspan = "6"></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td>所属長承認  <%= month_check_window(@mday) %><br>
         <% @works = Work.find_by(day: @mday.day.beginning_of_month) %>
 
-          <%= form_for @works, :url => { :controller => :users, :action => :create_monthwork, :day => @works.day},method: :patch do %><!--多分やるならURLにdayをくっつけるのが吉っぽい-->
+          <%= form_for @works, :url => { :controller => :users, :action => :create_monthwork, :day => @works.day},method: :patch do %>
             <%= fields_for "work", @works do |fi| %>
               <%= fi.collection_select(:month_request, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
             <% end %>

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  day: 2019-09-01
+  leaving_time: 2019-09-01 00:55:08
+  attendance_time: 2019-09-01 00:55:08
+  attendance_after_chenge: 2019-09-01 00:55:08
+  liaving_after_chenge: 2019-09-01 00:55:08
+  change_request: MyString
+  work: one
+
+two:
+  user_id: 1
+  day: 2019-09-01
+  leaving_time: 2019-09-01 00:55:08
+  attendance_time: 2019-09-01 00:55:08
+  attendance_after_chenge: 2019-09-01 00:55:08
+  liaving_after_chenge: 2019-09-01 00:55:08
+  change_request: MyString
+  work: two

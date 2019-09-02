@@ -32,7 +32,7 @@ module WorksHelper
   def over_check(work)
     if work
       work && work.over_time_request
-      if work.over_time_request=="上長A" || work.over_time_request=="上長B" || work.over_time_request=="上長C"
+      if work.over_time_request=="上長１" || work.over_time_request=="上長2" || work.over_time_request=="上長3"
         "残業を#{work.over_time_request}に申請中"
       elsif work.over_time_request=="否認"
         "残業否認"
@@ -54,7 +54,7 @@ module WorksHelper
   def work_check(work)
     if work
       work && work.change_request
-      if work.change_request=="上長A" || work.change_request=="上長B" || work.change_request=="上長C"
+      if work.change_request=="上長１" || work.change_request=="上長2" || work.change_request=="上長3"
         "勤怠変更を#{work.change_request}に申請中"
       elsif work.change_request=="否認"
         "勤怠変更否認"

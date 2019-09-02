@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     #work_edit resource
   get 'users/:id/works/:date/edit', to: 'works#edit', as: :edit_works
   patch 'users/:id/works/:date/update', to: 'works#update', as: :update_works
+  get 'users/:id/worklog/:date/', to: 'users#work_log', as: :work_logs
   resources :users do
     
   resources :works

@@ -135,3 +135,77 @@ input, textarea, select, .uneditable-input {
 }
 
 
+/* ボタン */
+
+.btn-submit {
+  width:  40%;
+}
+
+.modal-footer {
+  text-align: center;
+}
+
+.fixed_btn
+{
+  position: fixed;
+  bottom: 50%; 
+  left: 30%;
+  padding: 6px 40px;
+}
+.square_btn{
+    display: inline-block;
+    padding: 1em 2em;
+    text-decoration: none;
+    background: #668ad8;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+}
+.square_btn:active {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;/*線を消す*/
+}
+
+
+/* 【申請のお知らせ】表示  */
+#over_work, #month, #change_work {
+  color: red;
+}
+
+#blue {
+  color: blue;
+}
+
+
+/*モーダル表示*/ 
+.modal-content {
+  text-align: center;
+}
+
+.close {
+  padding: 10px!important;
+}
+
+.top td {
+  vertical-align: top!important;
+}
+
+input[type="checkbox"] {
+      width: 12px;
+}
+
+
+
+/*モーダル　残業表示*/ 
+.over_work {
+  width: 1000px;
+}
+
+/*select ボックス*/
+
+
+#test {
+  background-color: red;
+}

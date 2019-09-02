@@ -1,5 +1,6 @@
 class Work < ApplicationRecord
   belongs_to :user
+  has_many :work_rogs
   validates :day,  presence: true
   validate :leaving_time_should_existence_attendance_time
   validate :leaving_time_should_early_attendance_time

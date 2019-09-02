@@ -1,0 +1,11 @@
+<% provide(:title, "勤怠ログ") %>
+
+
+<% @works.each do |work|%>
+
+
+<% @logs = work.work_rogs%>
+<% @logs.each do |log|%>
+<%=log.day%>
+<%end%>
+<%end%>

@@ -4,7 +4,6 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: [:destroy, :edit_basic_info, :update_basic_info]
 
   require 'csv'
-
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
       if current_user.admin?
@@ -191,11 +190,11 @@ def update_changework
   update_changework_params.each do |id, item|
       work = Work.find_by(id: id)
       if item[:change_request] == "承認" && item.fetch("check_box") == "true"
-          ## 勤怠ログの作成
-          #WorkLog.create!(user_id: work.user_id, work_id: work.id, day: work.day, start_time: work.start_time, end_time: work.end_time,
-          #                starttime_change: work.starttime_change, endtime_change: work.endtime_change, work_check: work.work_check )
-          # 勤怠変更申請（更新）
-          work.update(change_request: item[:change_request], attendance_time: work.attendance_time, leaving_time: work.leaving_time)
+          # 勤怠ログの作成
+          WorkRog.create!(user_id: work.user_id, work_id: work.id, day: work.day, attendance_time: work.attendance_time, leaving_time: work.leaving_time,
+                          attendance_after_chenge: work.attendance_after_chenge, liaving_after_chenge: work.liaving_after_chenge, change_request: work.change_request )
+          #勤怠変更申請（更新）
+          work.update(change_request: item[:change_request], attendance_time: work.attendance_after_chenge, leaving_time: work.liaving_after_chenge)
           update_count+=1
       elsif item.fetch("check_box") == "true"
           work.update(item)
@@ -206,6 +205,19 @@ def update_changework
   flash[:success] = "#{update_changework_params.keys.count}件中#{update_count}件、勤怠変更申請を更新しました!"
 #セレクトユーザーの編集した月ページへ
 redirect_to  user_path(current_user,Date.today)
+end
+
+def work_log
+  @user = User.find(params[:id])
+  @first_day = Date.today.beginning_of_month
+  @last_day = @first_day.end_of_month
+      @works = @user.works.where('day >= ? and day <= ?', @first_day, @last_day).order('day')
+  #@logs = @works.work_rogs.all
+  @works.each do |work|
+    if work.work_rogs
+    @logs = work.work_rogs
+    end
+  end
 
 end
 
