@@ -209,8 +209,12 @@ end
 
 def work_log
   @user = User.find(params[:id])
-  @first_day = Date.today.beginning_of_month
-  @last_day = @first_day.end_of_month
+  if params[:first_day].nil?
+    @first_day = Date.today.beginning_of_month
+  else
+    @first_day = Date.parse(params[:first_day])
+  end
+    @last_day = @first_day.end_of_month
       @works = @user.works.where('day >= ? and day <= ?', @first_day, @last_day).order('day')
   #@logs = @works.work_rogs.all
   @works.each do |work|

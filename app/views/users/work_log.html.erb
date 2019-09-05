@@ -1,11 +1,47 @@
 <% provide(:title, "勤怠ログ") %>
 
+<table class = "table-bordered table-condensed">
+  <tr>
+    <td>
+      <%= link_to "←", work_logs_path(params: {id: @user.id, first_day: @first_day.prev_month }),
+                      class: "btn btn-xs btn-primary" %>
+      &emsp;<%= @first_day.strftime("%Y年%-m月") %>　勤怠変更ログ&emsp;
+      <%= link_to "→", work_logs_path(params: {id: @user.id, first_day: @first_day.next_month }),
+                      class: "btn btn-xs btn-primary" %>
+    </td>
+    <td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未設定" %></td>
+    <td>氏名：<%= @user.name %></td>
+</table>
+
+<table class = "table-bordered table-striped table-condensed "style="table-layout:fixed;width:100%;" >
+  <thead>
+    <tr>
+      <td style="width: 40px" >日付</td>
+      <td style="width: 40px" >変更前出社時間</td>
+      <td style="width: 40px" >変更前退社時間</td>
+      <td style="width: 40px" >変更後出社時間</td>
+      <td style="width: 40px" >変更後退社時間</td>
+      <td style="width: 40px" >指示者</td>
+      <td style="width: 40px" >承認日</td>
+    </tr>
+  </thead>
+</table>
 
 <% @works.each do |work|%>
-
-
-<% @logs = work.work_rogs%>
-<% @logs.each do |log|%>
-<%=log.day%>
-<%end%>
+  <% @logs = work.work_rogs.where('day >= ? and day <= ?', @first_day, @last_day).order('day')%>
+    <% @logs.each do |log|%>
+      <table class = "table-bordered table-striped table-condensed"style="table-layout:fixed;width:100%;">
+        <thead>
+          <tr>
+            <td style="width: 40px" ><%=log.day.strftime("%-m/%d")%></td>
+            <td style="width: 40px" ><%=log.attendance_time.strftime("%H:%M").to_s if log.attendance_time.present? %></td>
+            <td style="width: 40px" ><%=log.leaving_time.strftime("%H:%M").to_s if log.leaving_time.present?%></td>
+            <td style="width: 40px" ><%=log.attendance_after_chenge.strftime("%H:%M").to_s%></td>
+            <td style="width: 40px" ><%=log.liaving_after_chenge.strftime("%H:%M").to_s%></td>
+            <td style="width: 40px" ><%=log.change_request%></td>
+            <td style="width: 40px" ><%=log.updated_at.strftime("%-m/%d")%></td>
+          </tr>
+        </thead>
+      </table>
+    <%end%>
 <%end%>
