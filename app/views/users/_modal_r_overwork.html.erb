@@ -36,7 +36,7 @@
                         </td>
                         <td class="center">
                             <%= fields_for @work do |fi| %>
-                                <%= fi.check_box :check_box,{},checked_value = "true",unchecked_value = "false" %>
+                                <%= fi.check_box :check_tomorrow,{},checked_value = "true",unchecked_value = "false" %>
                             <% end %>
                         </td>
                         <td>

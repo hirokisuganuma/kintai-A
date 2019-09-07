@@ -116,7 +116,7 @@ class UsersController < ApplicationController
   def create_overwork
     time_change = time_change(params[:work][:day], params[:work][:over_time_end])
     @work=select_user.works.find_by(day: params[:work][:day])
-    if params[:work][:check_box]=="true"
+    if params[:work][:check_tomorrow]=="true"
         date_tomorrow=time_change.tomorrow - 9.hours
         @work.update_attributes(create_overwork_params)
         @work.update(over_time_end: date_tomorrow)
@@ -278,7 +278,7 @@ end
     end
     
     def create_overwork_params
-      params.require(:work).permit(:over_time_end, :over_time_work, :over_time_request, :day, :check_box)
+      params.require(:work).permit(:over_time_end, :over_time_work, :over_time_request, :day, :check_tomorrow)
     end
 
     def update_overwork_params
