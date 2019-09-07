@@ -32,42 +32,51 @@ class WorksController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-      works_params.each do |id, time|
+      works_params.each do |id, item|
         work = Work.find(id)
           if work.day > Date.current && !current_user.admin?
             flash[:warning] = '一部編集が無効となった項目があります。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
-            if time.fetch("attendance_time").present?
-              attendance_time = Time.parse("#{work.day} #{time.fetch("attendance_time")}") - 9.hour
+          if item[:check_tomorrow] == "true"
+            if item.fetch("attendance_time").present?
+              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
             else
               attendance_time = nil
             end
-            if time.fetch("leaving_time").present?
-              if item[:check_tomorrow] == "true"
-                  leaving_time = Time.parse("#{work.day} #{time.fetch("leaving_time")}").tomorrow - 9.hour
-              else
-                leaving_time = Time.parse("#{work.day} #{time.fetch("leaving_time")}") - 9.hour 
-              end
+            if item.fetch("leaving_time").present?
+                  leaving_time = Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
             else
               leaving_time = nil
             end
-          elsif time["attendance_time"].blank? && time["leaving_time"].blank?
-          elsif time["attendance_time"].blank? || time["leaving_time"].blank?
+          else
+            if item.fetch("attendance_time").present?
+              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
+            else
+              attendance_time = nil
+            end
+            if item.fetch("leaving_time").present?
+                  leaving_time = Time.parse("#{work.day} #{item.fetch("leaving_time")}")- 9.hour
+            else
+              leaving_time = nil
+            end
+          end
+          elsif item["attendance_time"].blank? && item["leaving_time"].blank?
+          elsif item["attendance_time"].blank? || item["leaving_time"].blank?
             flash[:warning] = '一部編集が無効となった項目があります。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
-          elsif time["attendance_time"].to_s > time["leaving_time"].to_s
+          elsif item["attendance_time"].to_s > item["leaving_time"].to_s
             flash[:warning] = '出社時間より退社時間が早い項目がありました'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
-          elsif time["attendance_time"] !~ /\d{2}:00|15|30|45/ then flash[:warning] = '入力は１５分間隔でお願いします。'
+          elsif item["attendance_time"] !~ /\d{2}:00|15|30|45/ then flash[:warning] = '入力は１５分間隔でお願いします。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
-          elsif time["leaving_time"] !~ /\d{2}:00|15|30|45/ then flash[:warning] = '入力は１５分間隔でお願いします。'
+          elsif item["leaving_time"] !~ /\d{2}:00|15|30|45/ then flash[:warning] = '入力は１５分間隔でお願いします。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           else
-            time["attendance_after_chenge"] = time["attendance_time"]
-            time["liaving_after_chenge"] = time["leaving_time"]
-            time.delete("attendance_time")
-            time.delete("leaving_time")
-            work.update_attributes(time)
+            item["attendance_after_chenge"] = item["attendance_time"]
+            item["liaving_after_chenge"] = item["leaving_time"]
+            item.delete("attendance_time")
+            item.delete("leaving_time")
+            work.update_attributes(item)
               work.save(validate: false)
                   flash[:success] = '勤怠時間を更新しました。なお本日以降の更新はできません。'
           end
