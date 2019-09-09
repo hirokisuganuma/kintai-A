@@ -4,11 +4,13 @@
   <table class = "table-bordered table-condensed">
     <tr>
       <td>
+        <%if current_user?(@user)%>
         <%= link_to "←", user_path(params: {id: @user.id, first_day: @first_day.prev_month }),
                         class: "btn btn-xs btn-primary" %>
         &emsp;<%= @first_day.strftime("%Y年%-m月") %>　時間管理表&emsp;
         <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),
                         class: "btn btn-xs btn-primary" %>
+        <%end%>
       </td>
       <td>指定開始時間時間　<%=@user.start_time.strftime("%H"":""%M")%></td>
       <td>指定終了時間　<%=@user.end_time.strftime("%H"":""%M")%></td>
@@ -21,7 +23,7 @@
       <td>締日　<%= @last_day.to_s(:date) %></td>
     </tr>
   </table>
-    <%if current_user.try(:sv?)%>
+    <%if current_user.try(:sv?) && current_user?(@user)%>
       <% @name=current_user.name %>
 
       <% if Work.find_by(over_time_request: @name) %>
@@ -58,9 +60,11 @@
             </div>
       <% end %>
     <%end%>
+    <%if current_user?(@user)%>
     <%= link_to "勤怠を編集", edit_works_path(@user, @first_day), class: "btn btn-primary" %>
     <%= link_to "csv出力",user_csv_output_path(@user, format: :csv, date: @first_day), {class: "btn btn-primary", id: "csv"} %>
     <%= link_to "勤怠修正ログ（承認済）", work_logs_path(@user,@first_day), class: "btn btn-primary" %>
+    <%end%>
   <table class = "table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -94,10 +98,12 @@
       <% (@works).each do |work| %>
         <tr>
           <td>
+          <%if current_user?(@user)%>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal1" data-date="<%=work.day.month%>/<%=work.day.day%>" data-date_1="<%=work.day.year%>-<%=work.day.month%>-<%=work.day.day%>" data-day="<%= %w(日 月 火 水 木 金 土)[work.day.wday]%>" data-id="<%= work.id%>">
               残業申請
             </button>
             <%= render 'modal_r_overwork' %>
+          <%end%>
           </td>
           <td><%= work.day.strftime("%-m/%d")%></td>
           <td><% %w{日 月 火 水 木 金 土}[work.day.wday] %>
@@ -109,17 +115,21 @@
           <td><%= work.attendance_time.strftime("%H") if work.attendance_time.present? %></td>
           <td><%= work.attendance_time.strftime("%M") if work.attendance_time.present? %></td>
           <td>
+          <%if current_user?(@user)%>
             <% if work.day == Date.today && work.attendance_time.nil? %>
               <%= button_to "出社", user_works_path(@user), class: "btn btn-xs btn-primary" %>
             <% end %>
+          <%end%>
           </td>
           
           <td><%= work.leaving_time.strftime("%H") if work.leaving_time.present? %></td>
           <td><%= work.leaving_time.strftime("%M") if work.leaving_time.present? %></td>
           <td>
+          <%if current_user?(@user)%>
             <% if work.day == Date.today && work.attendance_time.present? && work.leaving_time.nil? %>
               <%= button_to "退社", user_works_path(@user), class: "btn btn-xs btn-primary" %>
             <% end %>
+          <%end%>
           </td>
           <td>
             <% if work.attendance_time.present? && work.leaving_time.present? %>
@@ -155,17 +165,15 @@
         <% @works = Work.find_by(day: @mday.day.beginning_of_month) %>
 
           <%= form_for @works, :url => { :controller => :users, :action => :create_monthwork, :day => @works.day},method: :patch do %>
-            <%= fields_for "work", @works do |fi| %>
-              <%= fi.collection_select(:month_request, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
-            <% end %>
-            
-            <%= fields_for "work", @works do |fi| %>
-              <%= fi.hidden_field @works, :value => params[:day] %>
-
-            <% end %>
-                    
-            <%= submit_tag "申請", class: "btn btn-primary" %>
-
+          <%= fields_for "work", @works do |fi| %>
+                <%= fi.collection_select(:month_request, User.get_sv_user_whithout_myself(session), :name, :name, {:include_blank => true}, {:required => "required"})%>
+              <% end %>
+            <%if current_user?(@user)%>
+              <%= fields_for "work", @works do |fi| %>
+                <%= fi.hidden_field @works, :value => params[:day] %>
+              <% end %>
+              <%= submit_tag "申請", class: "btn btn-primary" %>
+            <%end%>
           <% end %>
         </td>
     </tr>

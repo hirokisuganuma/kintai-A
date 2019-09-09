@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @month_work = @user.works.find_by(day: params[:id])
-    if    current_user.admin? 
+    if    current_user.admin? || current_user.sv?
     elsif current_user != User.find(params[:id]) 
         redirect_to(root_url) 
         flash[:warning] = "ほかのユーザにはアクセスできません"
@@ -132,7 +132,7 @@ class UsersController < ApplicationController
 
   def update_overwork
     if params[:commit] == "確認"
-      #今後確認用パスを投げる
+      redirect_to user_path(User.find_by(id: params[:id]))
         return
     end
     update_count = 0
@@ -163,7 +163,7 @@ class UsersController < ApplicationController
   
   def update_monthwork
     if params[:commit] == "確認"
-        #今後確認用パスを投げる
+      redirect_to user_path(User.find_by(id: params[:id]))
         return
     end
     update_count = 0
@@ -183,7 +183,7 @@ end
 
 def update_changework
   if params[:commit] == "確認"
-      #今後確認用パス投げる
+    redirect_to user_path(User.find_by(id: params[:id]))
       return
   end
   update_count = 0

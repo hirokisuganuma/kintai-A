@@ -21,6 +21,7 @@ gem 'therubyracer'
 gem 'rounding'
 gem 'activerecord-import'
 gem 'pry-rails'
+gem 'pry-byebug'
 gem 'bootstrap-will_paginate', '1.0.0'
 group :development, :test do
   gem 'sqlite3', '1.3.13'
