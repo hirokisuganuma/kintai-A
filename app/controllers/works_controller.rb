@@ -35,6 +35,7 @@ class WorksController < ApplicationController
       works_params.each do |id, item|
         work = Work.find(id)
           if work.day > Date.current && !current_user.admin?
+            break
             flash[:warning] = '一部編集が無効となった項目があります。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           if item[:check_tomorrow] == "true"

@@ -36,6 +36,7 @@
                 <%= af.collection_select :change_request, User.get_sv_user_whithout_myself(session), :name, :name, :include_blank => true %>
               </td>
             </tr>
+            <%= af.hidden_field :day, class: "form-control" %>
           <% end %>
         <% end %>
       </tbody>
