@@ -40,25 +40,25 @@ class WorksController < ApplicationController
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           if item[:check_tomorrow] == "true"
             if item.fetch("attendance_time").present?
-              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
+              item["attendance_time"] = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
             else
-              attendance_time = nil
+              item["attendance_time"] = nil
             end
             if item.fetch("leaving_time").present?
-                  leaving_time = Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
+              item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
             else
-              leaving_time = nil
+              item["leaving_time"]= nil
             end
           else
             if item.fetch("attendance_time").present?
-              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
+              item["attendance_time"] = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
             else
-              attendance_time = nil
+              item["attendance_time"] = nil
             end
             if item.fetch("leaving_time").present?
-                  leaving_time = Time.parse("#{work.day} #{item.fetch("leaving_time")}")- 9.hour
+              item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}") - 9.hour
             else
-              leaving_time = nil
+              item["leaving_time"]= nil
             end
           end
           elsif item["attendance_time"].blank? && item["leaving_time"].blank?
