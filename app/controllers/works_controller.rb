@@ -40,9 +40,9 @@ class WorksController < ApplicationController
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           if item[:check_tomorrow] == "true"
             if item.fetch("attendance_time").present?
-              item["attendance_time"] = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
+              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
             else
-              item["attendance_time"] = nil
+              attendance_time = nil
             end
             if item.fetch("leaving_time").present?
               item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
@@ -51,9 +51,9 @@ class WorksController < ApplicationController
             end
           else
             if item.fetch("attendance_time").present?
-              item["attendance_time"] = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
+              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
             else
-              item["attendance_time"] = nil
+              attendance_time = nil
             end
             if item.fetch("leaving_time").present?
               item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}") - 9.hour
@@ -74,7 +74,11 @@ class WorksController < ApplicationController
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           else
             item["attendance_after_chenge"] = item["attendance_time"]
-            item["liaving_after_chenge"] = item["leaving_time"]
+            if item[:check_tomorrow] == "true"
+              item["liaving_after_chenge"] = Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
+            else
+              item["liaving_after_chenge"] = item["leaving_time"]
+            end
             item.delete("attendance_time")
             item.delete("leaving_time")
             work.update_attributes(item)
