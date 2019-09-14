@@ -38,29 +38,29 @@ class WorksController < ApplicationController
             break
             flash[:warning] = '一部編集が無効となった項目があります。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
-          if item[:check_tomorrow] == "true"
-            if item.fetch("attendance_time").present?
-              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
-            else
-              attendance_time = nil
-            end
-            if item.fetch("leaving_time").present?
-              item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
-            else
-              item["leaving_time"]= nil
-            end
-          else
-            if item.fetch("attendance_time").present?
-              attendance_time = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
-            else
-              attendance_time = nil
-            end
-            if item.fetch("leaving_time").present?
-              item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}") - 9.hour
-            else
-              item["leaving_time"]= nil
-            end
-          end
+          #if item[:check_tomorrow] == "true"
+          #  if item.fetch("attendance_time").present?
+          #    item["attendance_time"] = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
+          #  else
+          #    item["attendance_time"] = nil
+          #  end
+          #  if item.fetch("leaving_time").present?
+          #    item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
+          #  else
+          #    item["leaving_time"]= nil
+          #  end
+          #else
+          #  if item.fetch("attendance_time").present?
+          #    item["attendance_time"] = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
+          #  else
+          #    item["attendance_time"] = nil
+          #  end
+          #  if item.fetch("leaving_time").present?
+          #    item["leaving_time"]= Time.parse("#{work.day} #{item.fetch("leaving_time")}") - 9.hour
+          #  else
+          #    item["leaving_time"]= nil
+          #  end
+          #end
           elsif item["attendance_time"].blank? && item["leaving_time"].blank?
           elsif item["attendance_time"].blank? || item["leaving_time"].blank?
             flash[:warning] = '一部編集が無効となった項目があります。'
@@ -73,11 +73,11 @@ class WorksController < ApplicationController
           elsif item["leaving_time"] !~ /\d{2}:00|15|30|45/ then flash[:warning] = '入力は１５分間隔でお願いします。'
             redirect_to edit_works_path(@user, params:{ id: @user.id, first_day: params[:first_day]})and return
           else
-            item["attendance_after_chenge"] = item["attendance_time"]
+            item["attendance_after_chenge"] = Time.parse("#{work.day} #{item.fetch("attendance_time")}") - 9.hour
             if item[:check_tomorrow] == "true"
               item["liaving_after_chenge"] = Time.parse("#{work.day} #{item.fetch("leaving_time")}").tomorrow - 9.hour
             else
-              item["liaving_after_chenge"] = item["leaving_time"]
+              item["liaving_after_chenge"] = Time.parse("#{work.day} #{item.fetch("leaving_time")}") - 9.hour
             end
             item.delete("attendance_time")
             item.delete("leaving_time")
