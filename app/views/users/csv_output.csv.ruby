@@ -1,8 +1,7 @@
 require 'csv'
 
-bom = "\uFEFF"
 csv_column_names = ["日付","出社時間","退社時間","備考"]
-CSV.generate(bom) do |csv|
+CSV.generate(encoding: Encoding::SJIS, row_sep: "\r\n", force_quotes: true) do |csv|
     csv << csv_column_names
         @works.each do |work|
             csv_column_values = [
