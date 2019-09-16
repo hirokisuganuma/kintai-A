@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @month_work = @user.works.find_by(day: params[:id])
-    if    current_user.admin? || current_user.sv?
+    if    current_user.admin? || current_user.superior?
     elsif current_user != User.find(params[:id]) 
         redirect_to(root_url) 
         flash[:warning] = "ほかのユーザにはアクセスできません"
@@ -236,10 +236,10 @@ end
     # windowsで作られたファイルに対応するので、encoding: "SJIS"を付けている
     CSV.foreach(params[:users_file].path, headers: true, encoding: "SJIS") do |row|
       user = User.new({ id: row["id"], name: row["name"], email: row["email"], affiliation: row["affiliation"], worker_number: row["worker_number"], card_id: row["card_id"], basic_time: row["basic_time"], 
-                        start_time: row["start_time"], end_time: row["end_time"], sv: row["sv"], admin: row["admin"], password: row["password"]})
+                        start_time: row["start_time"], end_time: row["end_time"], superior: row["superior"], admin: row["admin"], password: row["password"]})
       if user.valid?
           users << ::User.new({ id: row["id"], name: row["name"], email: row["email"], affiliation: row["affiliation"], worker_number: row["worker_number"], card_id: row["card_id"], basic_time: row["basic_time"], 
-          start_time: row["start_time"], end_time: row["end_time"], sv: row["sv"], admin: row["admin"], password: row["password"]})
+          start_time: row["start_time"], end_time: row["end_time"], superior: row["superior"], admin: row["admin"], password: row["password"]})
       else
         @errors << user.errors.inspect
         Rails.logger.warn(user.errors.inspect)

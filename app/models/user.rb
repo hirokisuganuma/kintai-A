@@ -32,10 +32,10 @@ class User < ApplicationRecord
 
     
   def User.get_sv_user_whithout_myself(session)
-    if User.find(session[:user_id]).sv == true
-      where(sv: true).where.not(id: session[:user_id]).order(:id)
+    if User.find(session[:user_id]).superior == true
+      where(superior: true).where.not(id: session[:user_id]).order(:id)
     else
-      where(sv: true).order(:id)
+      where(superior: true).order(:id)
     end
   end
   

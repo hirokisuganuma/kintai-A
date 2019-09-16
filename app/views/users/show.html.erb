@@ -23,7 +23,7 @@
       <td>締日　<%= @last_day.to_s(:date) %></td>
     </tr>
   </table>
-    <%if current_user.try(:sv?) && current_user?(@user)%>
+    <%if current_user.try(:superior?) && current_user?(@user)%>
       <% @name=current_user.name %>
 
       <% if Work.find_by(over_time_request: @name) %>
