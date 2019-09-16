@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 20190901005508) do
     t.time "specified_time", default: "2000-01-01 23:00:00"
     t.boolean "admin", default: false
     t.boolean "sv"
-    t.datetime "start_time", default: "2019-08-09 23:30:00"
-    t.datetime "end_time", default: "2019-08-10 08:30:00"
+    t.datetime "designated_start_time", default: "2019-08-09 23:30:00"
+    t.datetime "designated_end_time", default: "2019-08-10 08:30:00"
     t.integer "employee_number"
     t.integer "uid"
     t.index ["email"], name: "index_users_on_email", unique: true

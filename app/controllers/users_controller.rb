@@ -236,10 +236,10 @@ end
     # windowsで作られたファイルに対応するので、encoding: "SJIS"を付けている
     CSV.foreach(params[:users_file].path, headers: true, encoding: "SJIS") do |row|
       user = User.new({ id: row["id"], name: row["name"], email: row["email"], affiliation: row["affiliation"], employee_number: row["employee_number"], uid: row["uid"], basic_work_time: row["basic_work_time"], 
-                        start_time: row["start_time"], end_time: row["end_time"], superior: row["superior"], admin: row["admin"], password: row["password"]})
+                        designated_start_time: row["designated_start_time"], designated_end_time: row["designated_end_time"], superior: row["superior"], admin: row["admin"], password: row["password"]})
       if user.valid?
           users << ::User.new({ id: row["id"], name: row["name"], email: row["email"], affiliation: row["affiliation"], employee_number: row["employee_number"], uid: row["uid"], basic_work_time: row["basic_work_time"], 
-          start_time: row["start_time"], end_time: row["end_time"], superior: row["superior"], admin: row["admin"], password: row["password"]})
+          designated_start_time: row["designated_start_time"], designated_end_time: row["designated_end_time"], superior: row["superior"], admin: row["admin"], password: row["password"]})
       else
         @errors << user.errors.inspect
         Rails.logger.warn(user.errors.inspect)
@@ -253,7 +253,7 @@ end
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :affiliation, :basic_work_time,
-                                  :employee_number, :uid, :start_time, :end_time)
+                                  :employee_number, :uid, :designated_start_time, :designated_end_time)
     end
 
     def user_basic_params
