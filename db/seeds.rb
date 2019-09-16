@@ -45,7 +45,7 @@ User.create!(name:  "管理者",
                 email: email,
                 affiliation: "本社",
                 worker_number: n+1,
-                card_id: n+1,
+                uid: n+1,
                 password:              password,
                 password_confirmation: password)
     end

@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20190901005508) do
     t.datetime "start_time", default: "2019-08-09 23:30:00"
     t.datetime "end_time", default: "2019-08-10 08:30:00"
     t.integer "worker_number"
-    t.integer "card_id"
+    t.integer "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
