@@ -153,7 +153,7 @@
   <tfoot>
       <tr>
         <td></td>
-        <td colspan = "2"><%= format_basic_time(@user.basic_time).to_f * @worked_sum %></td>
+        <td colspan = "2"><%= format_basic_work_time(@user.basic_work_time).to_f * @worked_sum %></td>
         <td colspan = "6"></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
         <td></td>

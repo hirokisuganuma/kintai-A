@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20190901005508) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "affiliation"
-    t.time "basic_time", default: "2000-01-01 22:30:00"
+    t.time "basic_work_time", default: "2000-01-01 22:30:00"
     t.time "specified_time", default: "2000-01-01 23:00:00"
     t.boolean "admin", default: false
     t.boolean "sv"
