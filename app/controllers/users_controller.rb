@@ -126,7 +126,7 @@ class UsersController < ApplicationController
         @work.update(over_time_end: time_change-9.hours)
         @work.save(validate: false)
     end
-    flash[:success] = "申請しました！"
+    flash[:success] = "残業申請を登録しました"
     redirect_to  user_path(select_user,Date.today)
   end
 
@@ -144,20 +144,18 @@ class UsersController < ApplicationController
             update_count+=1
         end
     end
-    flash[:success] = "#{update_overwork_params.keys.count}件中#{update_count}件、残業申請を更新しました!"
+    flash[:success] = "#{update_overwork_params.keys.count}件中#{update_count}件、残業申請を更新しました"
     redirect_to  user_path(current_user,Date.today)
     
   end
 
   def create_monthwork
-    if params[:work]&&!params[:work][:piyo].blank?
-        @date = params[:work][:piyo].to_datetime
-    else
         @date = params[:day].to_datetime
-    end
     day = Date.new(@date.year,@date.month)
-            current_user.works.find_by(day: day).update(month_request: params[:work][:month_request])
-    flash[:success] = "申請しました!(１ヶ月分)"
+            month_work = current_user.works.find_by(day: day)
+            month_work.update(month_request: params[:work][:month_request])
+            month_work.save(validate: false)
+    flash[:success] = "一ヶ月の勤怠申請を登録しました"
     redirect_to  user_path(select_user,Date.today)
   end
   
@@ -175,7 +173,7 @@ class UsersController < ApplicationController
             update_count+=1
         end
     end
-    flash[:success] = "#{update_monthwork_params.keys.count}件中#{update_count}件、１ヶ月申請を更新しました!"
+    flash[:success] = "#{update_monthwork_params.keys.count}件中#{update_count}件、１ヶ月申請を更新しました"
     #セレクトユーザーの編集した月ページへ
     redirect_to  user_path(current_user,Date.today)
 end
@@ -197,12 +195,12 @@ def update_changework
           work.update(change_request: item[:change_request], attendance_time: work.attendance_after_chenge, leaving_time: work.liaving_after_chenge)
           update_count+=1
       elsif item.fetch("check_box") == "true"
-          work.update(item)
+        work.update(change_request: item[:change_request], attendance_time: work.attendance_after_chenge, leaving_time: work.liaving_after_chenge)
           work.update(check_box: "false")
           update_count+=1
       end
   end
-  flash[:success] = "#{update_changework_params.keys.count}件中#{update_count}件、勤怠変更申請を更新しました!"
+  flash[:success] = "#{update_changework_params.keys.count}件中#{update_count}件、勤怠変更申請を更新しました"
 #セレクトユーザーの編集した月ページへ
 redirect_to  user_path(current_user,Date.today)
 end

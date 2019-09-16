@@ -83,7 +83,7 @@ class WorksController < ApplicationController
             item.delete("leaving_time")
             work.update_attributes(item)
               work.save(validate: false)
-                  flash[:success] = '勤怠時間を更新しました。なお本日以降の更新はできません。'
+                  flash[:success] = '勤怠変更を申請しました。なお本日以降の登録はできません。'
           end
       end 
     redirect_to user_url(@user, params:{first_day: params[:date]})

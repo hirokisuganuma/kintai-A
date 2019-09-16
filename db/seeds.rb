@@ -11,6 +11,7 @@ User.create!(name:  "管理者",
   password_confirmation: "password",
   affiliation: "本社",
   employee_number: 11111,
+  uid: 123,
   admin:     true,
   )
 
@@ -20,6 +21,7 @@ User.create!(name:  "管理者",
   password_confirmation: "password",
   affiliation: "本社",
   employee_number: 11111,
+  uid:124,
   superior:     true,
   )
 
@@ -29,6 +31,7 @@ User.create!(name:  "管理者",
   password_confirmation: "password",
   affiliation: "本社",
   employee_number: 11112,
+  uid:125,
   superior:     true,
   )
 
@@ -37,6 +40,7 @@ User.create!(name:  "管理者",
   password:              "password",
   password_confirmation: "password",
   employee_number: 11113,
+  uid:126,
   affiliation: "本社",
   superior:     true,
   )

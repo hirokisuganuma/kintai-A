@@ -1,6 +1,5 @@
 <li>
   <%= link_to user.name, user %><br>
-    <% if current_user.admin? && !current_user?(user) %>
       | <%= link_to "削除", user, class: "btn btn-primary", method: :delete, data: { confirm: "本当に削除してもいいですか？" } %>
         <div class="panel-group" id="sampleAccordion-<%= user.id %>">
           <div class="panel panel-default">
@@ -46,7 +45,6 @@
             </div>
           </div>
         </div>
-    <% end %>
 </li>
 
 <style>
