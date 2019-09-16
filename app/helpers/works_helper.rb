@@ -23,7 +23,7 @@ module WorksHelper
   def overwork_time(over_work)
     a=over_work.day
     a_1=over_work.over_time_end
-    b=select_user.designated_end_time
+    b=select_user.designated_work_end_time
     c=Time.new(a.year,a.month,a.day,b.hour,b.min,b.sec)
     d=Time.new(a_1.year,a_1.month,a_1.day,a_1.hour,a_1.min,a_1.sec)
     (d-c)/60/60

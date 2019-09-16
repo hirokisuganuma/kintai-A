@@ -10,6 +10,7 @@ User.create!(name:  "管理者",
   password:              "password",
   password_confirmation: "password",
   affiliation: "本社",
+  employee_number: 11111,
   admin:     true,
   )
 
@@ -18,7 +19,8 @@ User.create!(name:  "管理者",
   password:              "password",
   password_confirmation: "password",
   affiliation: "本社",
-  sv:     true,
+  employee_number: 11111,
+  superior:     true,
   )
 
   User.create!(name:  "上長2",
@@ -26,15 +28,17 @@ User.create!(name:  "管理者",
   password:              "password",
   password_confirmation: "password",
   affiliation: "本社",
-  sv:     true,
+  employee_number: 11112,
+  superior:     true,
   )
 
   User.create!(name:  "上長3",
   email: "sv3@gmail.org",
   password:              "password",
   password_confirmation: "password",
+  employee_number: 11113,
   affiliation: "本社",
-  sv:     true,
+  superior:     true,
   )
 
   59.times do |n|
@@ -46,6 +50,7 @@ User.create!(name:  "管理者",
                 affiliation: "本社",
                 employee_number: n+1,
                 uid: n+1,
+                employee_number: 100000+n,
                 password:              password,
                 password_confirmation: password)
     end
